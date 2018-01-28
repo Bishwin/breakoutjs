@@ -30,6 +30,38 @@
 		let rightPressed = false;
 		let leftPressed = false;
 
+		let brickRowCount = 3;
+		let brickColumnCount = 5;
+		let brickWidth = 75;
+		let brickHeight = 20;
+		let brickPadding = 10;
+		let brickOffsetTop = 30;
+		let brickOffsetLeft = 30;
+              
+    let bricks = [];
+    for(col=0; col<brickColumnCount; col++) {
+      bricks[col]= [];
+      for(row=0; row<brickRowCount; row++) {
+        bricks[col][row] = {x: 0, y: 0};
+      }
+    }
+
+    function drawBricks(){
+      for(col=0; col<brickColumnCount; col++) {
+        for(row=0; row<brickRowCount; row++) {
+        	let brickX = (col*(brickWidth+brickPadding))+brickOffsetLeft;
+					let brickY = (row*(brickHeight+brickPadding))+brickOffsetTop;
+          bricks[col][row].x = 0;
+          bricks[col][row].y = 0;
+          ctx.beginPath();
+          ctx.rect(brickX, brickY, brickWidth, brickHeight);
+          ctx.fillStyle = "#0095DD";
+          ctx.fill();
+          ctx.closePath();
+        }	
+      }	
+    }
+
 		function drawBall() {
 			ctx.beginPath();
 			ctx.arc(x, y, ballRadius, 0, Math.PI*2);
@@ -48,21 +80,26 @@
 
 		function draw() {
 			ctx.clearRect(0,0, canvas.width, canvas.height);
-			drawBall();
+			drawBricks();
 			drawPaddle();
+			drawBall();
 
 			if( x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
 				dx = -dx
 			}
 
-			if( y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
-				dy = -dy
+			if( y + dy < ballRadius) {
+				dy = -dy;
+			} 
+			else if (y + dy > canvas.height-ballRadius) { 
+				alert("GAMEOVER");
+				document.location.reload();
 			}
 
 			if(rightPressed && paddleX < canvas.width-paddleWidth) {
 				paddleX += 7;
 			}
-			else if(leftPressed && paddleX > 0) {
+			 else if(leftPressed && paddleX > 0) {
 				paddleX -= 7;
 			}
 
